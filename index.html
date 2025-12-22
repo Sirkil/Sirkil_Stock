@@ -6,7 +6,6 @@
   <title>Stock Manager</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* --- LIGHT THEME VARIABLES --- */
     :root {
       --bg-color: #f4f6f9;
       --card-bg: #ffffff;
@@ -17,134 +16,59 @@
       --border: #dfe6e9;
       --shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      margin: 0; padding: 0;
-      height: 100vh; overflow: hidden;
-    }
-
-    /* --- LAYOUT UTILS --- */
+    body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; height: 100vh; overflow: hidden; }
     .hidden { display: none !important; }
     button { cursor: pointer; border: none; outline: none; -webkit-tap-highlight-color: transparent; }
     
-    /* --- LANDING SCREEN --- */
-    #view-landing {
-      height: 100%; display: flex; flex-direction: column; 
-      justify-content: center; align-items: center; padding: 25px; gap: 20px;
-    }
-    .landing-card {
-      width: 100%; max-width: 340px; height: 160px;
-      border-radius: 24px; color: white;
-      display: flex; flex-direction: column; 
-      justify-content: center; align-items: center;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      transition: transform 0.1s;
-    }
-    .landing-card:active { transform: scale(0.98); }
-    .card-take { background: linear-gradient(135deg, #74b9ff, #0984e3); } /* Friendly Blue */
-    .card-add { background: linear-gradient(135deg, #55efc4, #00b894); } /* Friendly Green */
-    .btn-icon { font-size: 32px; margin-bottom: 5px; }
-    .btn-label { font-size: 22px; font-weight: 600; }
-    .btn-desc { font-size: 13px; opacity: 0.9; }
+    #view-landing { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; gap: 20px; }
+    .landing-card { width: 100%; max-width: 340px; height: 160px; border-radius: 24px; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .card-take { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+    .card-add { background: linear-gradient(135deg, #55efc4, #00b894); }
 
-    /* --- APP SCREEN --- */
     #view-app { display: none; height: 100%; flex-direction: column; }
-    
-    .app-header {
-      padding: 20px; background: var(--card-bg);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03); z-index: 10;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .back-btn { background: #f1f2f6; color: var(--text-main); padding: 8px 15px; border-radius: 12px; font-weight: 600; font-size: 14px; }
-    .page-title { font-weight: 600; font-size: 18px; }
+    .app-header { padding: 20px; background: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: space-between; z-index: 100; }
+    .back-btn { background: #f1f2f6; color: var(--text-main); padding: 8px 15px; border-radius: 12px; font-weight: 600; }
+    .app-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
 
-    .app-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+    label { font-size: 11px; font-weight: 600; color: var(--text-sub); display: block; margin-bottom: 5px; margin-top: 15px; text-transform: uppercase; }
+    select, input { width: 100%; padding: 14px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 12px; font-size: 15px; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-    /* INPUT STYLES */
-    label { font-size: 12px; font-weight: 600; color: var(--text-sub); display: block; margin-bottom: 8px; margin-top: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
-    
-    select, input {
-      width: 100%; padding: 16px; 
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      border-radius: 16px;
-      font-size: 16px; color: var(--text-main);
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    select:focus, input:focus { border-color: var(--accent-take); }
+    #searchResults { background: white; border-radius: 12px; margin-top: 5px; box-shadow: var(--shadow); max-height: 200px; overflow-y: auto; border: 1px solid var(--border); }
+    .search-item { padding: 12px; border-bottom: 1px solid #f1f2f6; display: flex; justify-content: space-between; align-items: center; }
+    .add-btn { background: var(--text-main); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; }
 
-    /* SEARCH RESULTS */
-    #searchResults {
-      background: white; border-radius: 16px; margin-top: 10px;
-      box-shadow: var(--shadow); max-height: 250px; overflow-y: auto;
-    }
-    .search-item {
-      padding: 15px; border-bottom: 1px solid #f1f2f6; display: flex; justify-content: space-between; align-items: center;
-    }
-    .add-btn { background: var(--text-main); color: white; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+    .cart-card { background: white; border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); border: 1px solid #f1f2f6; }
+    .qty-input { width: 80px; text-align: center; border: 2px solid #f1f2f6; border-radius: 10px; padding: 10px; font-weight: 600; font-size: 16px; color: var(--accent-take); }
 
-    /* CART CARDS (MATCHING YOUR IMAGE) */
-    .cart-card {
-      background: white; border-radius: 16px; padding: 15px; margin-bottom: 12px;
-      display: flex; justify-content: space-between; align-items: center;
-      box-shadow: var(--shadow); border: 1px solid #f1f2f6;
+    /* Modal for New Item */
+    #new-item-modal { 
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;
     }
-    .item-info { display: flex; flex-direction: column; }
-    .item-name { font-weight: 600; font-size: 16px; color: var(--text-main); }
-    .item-cat { font-size: 12px; color: var(--text-sub); }
+    .modal-content { background: white; width: 90%; max-width: 400px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
-    /* QTY CONTROL (+ / -) */
-    .qty-box {
-      display: flex; align-items: center;
-      background: #f1f2f6; border-radius: 12px; padding: 4px;
-    }
-    .qty-btn { width: 36px; height: 36px; font-size: 18px; font-weight: 600; background: transparent; color: var(--text-main); display: flex; justify-content: center; align-items: center; }
-    .qty-val { width: 30px; text-align: center; font-weight: 600; font-size: 16px; }
-
-    /* BOTTOM BAR */
-    .bottom-bar {
-      position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px;
-      background: white; border-top: 1px solid var(--border); box-sizing: border-box;
-    }
-    .submit-btn {
-      width: 100%; padding: 18px; border-radius: 16px;
-      font-size: 16px; font-weight: 600; color: white;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    /* LOADER */
-    #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--accent-take); font-weight: 600; }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: white; border-top: 1px solid var(--border); box-sizing: border-box; }
+    .submit-btn { width: 100%; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
   </style>
 </head>
 <body>
 
-  <div id="loader">
-    <div style="font-size:40px; margin-bottom:10px;">📦</div>
-    <div>Loading System...</div>
-  </div>
+  <div id="loader">📦<br>Loading System...</div>
 
   <div id="view-landing" class="hidden">
     <button class="landing-card card-take" onclick="startApp('TAKE')">
-      <span class="btn-icon">📤</span>
-      <span class="btn-label">Take Item</span>
-      <span class="btn-desc">Request Approval</span>
+       <span style="font-size:32px;">📤</span><br><b>Take Item</b>
     </button>
-    
     <button class="landing-card card-add" onclick="startApp('ADD')">
-      <span class="btn-icon">📥</span>
-      <span class="btn-label">Add Stock</span>
-      <span class="btn-desc">Direct Update</span>
+       <span style="font-size:32px;">📥</span><br><b>Add Stock</b>
     </button>
   </div>
 
   <div id="view-app">
     <div class="app-header">
       <button class="back-btn" onclick="goHome()">Back</button>
-      <span class="page-title" id="page-title">Request</span>
+      <span id="page-title" style="font-weight:600;">Request</span>
       <div style="width:50px"></div>
     </div>
 
@@ -157,7 +81,10 @@
 
       <hr style="margin:25px 0; border:0; border-top:1px dashed #dfe6e9;">
 
-      <label>Search Item</label>
+      <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+        <label style="margin-top:0;">Search Item</label>
+        <button id="addNewBtn" class="hidden" onclick="toggleModal(true)" style="background:var(--accent-add); color:white; padding:5px 12px; border-radius:8px; font-size:11px; margin-bottom:8px;">+ ADD NEW ITEM</button>
+      </div>
       <input type="text" id="searchInput" placeholder="Type name..." autocomplete="off">
       <div id="searchResults" class="hidden"></div>
 
@@ -169,65 +96,90 @@
     </div>
   </div>
 
+  <div id="new-item-modal" class="hidden">
+    <div class="modal-content">
+      <h3 style="margin-top:0;">Add New Item</h3>
+      <label>Item Name</label>
+      <input type="text" id="newName" placeholder="Item Name...">
+      
+      <label>Quantity</label>
+      <input type="number" id="newQty" value="1">
+
+      <label>Sheet / Category</label>
+      <select id="newCat"></select>
+
+      <div style="display:flex; gap:10px; margin-top:25px;">
+        <button onclick="toggleModal(false)" style="flex:1; padding:12px; background:#f1f2f6; border-radius:10px; font-weight:600;">Cancel</button>
+        <button onclick="saveNewItem()" style="flex:2; padding:12px; background:var(--accent-add); color:white; border-radius:10px; font-weight:600;">Add to List</button>
+      </div>
+    </div>
+  </div>
+
 <script>
   // ===========================================
   // ⚠️ PASTE YOUR NEW SCRIPT URL HERE 👇
-  const API_URL = "https://script.google.com/macros/s/AKfycbyLbQkZpnwOq0Q-dQ7bFoMlRc8IzJvqUQWuYB5CRilqWEEFGCpz5BvXsm2afFyB7GPf/exec"; 
+  const API_URL = "https://script.google.com/macros/s/AKfycbzBoNBfLSSy1S1bLFUASxE-vtJVbIUhoto_rsZ6LnHjT-uT7VCDSn_pTybiNqxrS8lq/exec"; 
 
   const STAFF_LIST = [
     { name: "Ahmed", email: "ahmed.tanany@sirkil.com" },
     { name: "Abdullah", email: "abdallah.yahya@sirkil.com" },
-    { name: "Omar", email: "omar@sirkil.com" },
-    { name: "Amr", email: "amr@example.com" },
-    { name: "Rami", email: "amr@example.com" },
-    { name: "Hazem", email: "amr@example.com" }
+    { name: "Omar", email: "omar@sirkil.com" }
   ];
-  // ===========================================
 
   let inventory = [];
+  let categories = [];
   let cart = [];
   let MODE = "";
 
   window.onload = async () => {
-    // Populate Staff
     const sel = document.getElementById("userSelect");
     STAFF_LIST.forEach(u => sel.add(new Option(u.name, u.email)));
 
-    // Load Data
     try {
       const res = await fetch(API_URL);
-      inventory = await res.json();
+      const data = await res.json();
+      inventory = data.items;
+      categories = data.categories;
+
+      const catSel = document.getElementById("newCat");
+      categories.forEach(c => catSel.add(new Option(c, c)));
+
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("view-landing").classList.remove("hidden");
-    } catch(e) {
-      document.getElementById("loader").innerHTML = "Connection Failed.<br>Check Script URL.";
-    }
+    } catch(e) { document.getElementById("loader").innerText = "Connection Error"; }
   };
 
   function startApp(mode) {
     MODE = mode;
     document.getElementById("view-landing").classList.add("hidden");
     document.getElementById("view-app").style.display = "flex";
+    document.getElementById("page-title").innerText = mode === 'TAKE' ? "Take from Stock" : "Add to Stock";
     
-    const title = document.getElementById("page-title");
+    if(mode === "ADD") document.getElementById("addNewBtn").classList.remove("hidden");
+    
     const btn = document.getElementById("mainBtn");
+    btn.style.background = mode === 'TAKE' ? "#0984e3" : "#00b894";
+  }
 
-    if (mode === 'TAKE') {
-      title.innerText = "Take from Stock";
-      btn.innerText = "Send Request";
-      btn.style.background = "#0984e3";
-    } else {
-      title.innerText = "Add to Stock";
-      btn.innerText = "Confirm Add";
-      btn.style.background = "#00b894";
+  function goHome() { location.reload(); }
+
+  // MODAL LOGIC
+  function toggleModal(show) {
+    document.getElementById("new-item-modal").classList.toggle("hidden", !show);
+    if(show) {
+        document.getElementById("newName").value = document.getElementById("searchInput").value;
     }
   }
 
-  function goHome() {
-    document.getElementById("view-app").style.display = "none";
-    document.getElementById("view-landing").classList.remove("hidden");
-    cart = [];
-    renderCart();
+  function saveNewItem() {
+    const name = document.getElementById("newName").value;
+    const qty = parseInt(document.getElementById("newQty").value);
+    const category = document.getElementById("newCat").value;
+    
+    if(!name || qty <= 0) return alert("Enter valid name and quantity");
+    
+    addToCart(name, category, qty);
+    toggleModal(false);
   }
 
   // SEARCH LOGIC
@@ -245,66 +197,57 @@
       matches.slice(0, 10).forEach(item => {
         const div = document.createElement("div");
         div.className = "search-item";
-        div.innerHTML = `
-          <div>
-            <div style="font-weight:600;">${item.name}</div>
-            <div style="font-size:12px; color:#aaa;">${item.category}</div>
-          </div>
-          <button class="add-btn" onclick="addToCart('${item.name}', '${item.category}')">ADD</button>
-        `;
+        div.innerHTML = `<div><b>${item.name}</b><br><small>${item.category}</small></div><button class="add-btn" onclick="addToCart('${item.name}', '${item.category}')">ADD</button>`;
         resultsDiv.appendChild(div);
       });
-    } else {
-      resultsDiv.classList.add("hidden");
-    }
+    } else { resultsDiv.classList.add("hidden"); }
   });
 
-  function addToCart(name, category) {
+  function addToCart(name, category, qty = 1) {
     const existing = cart.find(c => c.name === name && c.category === category);
-    if(existing) existing.qty++;
-    else cart.push({ name, category, qty: 1 });
+    if(existing) existing.qty += qty;
+    else cart.push({ name, category, qty });
     
     renderCart();
     searchInput.value = "";
     resultsDiv.classList.add("hidden");
   }
 
-  // CART UI (MATCHING IMAGE 2)
   function renderCart() {
     const list = document.getElementById("cartList");
     list.innerHTML = "";
-    
     cart.forEach((item, idx) => {
       const div = document.createElement("div");
       div.className = "cart-card";
       div.innerHTML = `
-        <div class="item-info">
-          <span class="item-name">${item.name}</span>
-          <span class="item-cat">${item.category}</span>
-        </div>
-        <div class="qty-box">
-          <button class="qty-btn" onclick="modQty(${idx}, -1)">−</button>
-          <span class="qty-val">${item.qty}</span>
-          <button class="qty-btn" onclick="modQty(${idx}, 1)">+</button>
+        <div><b>${item.name}</b><br><small>${item.category}</small></div>
+        <div style="display:flex; align-items:center; gap:10px;">
+           <input type="number" class="qty-input" value="${item.qty}" onchange="updateQty(${idx}, this.value)">
+           <button style="color:#ff7675; font-weight:600; background:none;" onclick="updateQty(${idx}, 0)">✕</button>
         </div>
       `;
       list.appendChild(div);
     });
   }
 
-  function modQty(idx, delta) {
-    cart[idx].qty += delta;
+  function updateQty(idx, val) {
+    cart[idx].qty = parseInt(val);
     if(cart[idx].qty <= 0) cart.splice(idx, 1);
     renderCart();
   }
 
   async function submitData() {
-    if(cart.length === 0) return alert("Please add items.");
+    if(cart.length === 0) return alert("Add items first");
     const purpose = document.getElementById("purpose").value;
-    if(!purpose) return alert("Enter a purpose.");
+    if(!purpose) return alert("Enter purpose");
 
     const uSel = document.getElementById("userSelect");
-    const user = { name: uSel.options[uSel.selectedIndex].text, email: uSel.value };
+    const payload = { 
+        type: MODE, 
+        user: { name: uSel.options[uSel.selectedIndex].text, email: uSel.value }, 
+        purpose, 
+        cart 
+    };
 
     const btn = document.getElementById("mainBtn");
     btn.innerText = "Processing...";
@@ -314,13 +257,12 @@
       await fetch(API_URL, {
         method: "POST",
         mode: "no-cors",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ type: MODE, user, purpose, cart })
+        body: JSON.stringify(payload)
       });
-      alert("Success! Action Recorded.");
+      alert("Success!");
       location.reload();
     } catch(e) {
-      alert("Error sending data.");
+      alert("Error.");
       btn.disabled = false;
       btn.innerText = "Retry";
     }
