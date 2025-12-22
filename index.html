@@ -3,16 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Stock Manager</title>
+  <title>Stock Manager Pro</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* --- LIGHT THEME VARIABLES --- */
     :root {
       --bg-color: #f4f6f9;
       --card-bg: #ffffff;
       --text-main: #2d3436;
       --text-sub: #636e72;
-      --accent-take: #6c5ce7;
+      --accent-take: #0984e3;
       --accent-add: #00b894;
       --border: #dfe6e9;
       --shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -26,11 +25,9 @@
       height: 100vh; overflow: hidden;
     }
 
-    /* --- LAYOUT UTILS --- */
     .hidden { display: none !important; }
     button { cursor: pointer; border: none; outline: none; -webkit-tap-highlight-color: transparent; }
     
-    /* --- LANDING SCREEN --- */
     #view-landing {
       height: 100%; display: flex; flex-direction: column; 
       justify-content: center; align-items: center; padding: 25px; gap: 20px;
@@ -44,107 +41,71 @@
       transition: transform 0.1s;
     }
     .landing-card:active { transform: scale(0.98); }
-    .card-take { background: linear-gradient(135deg, #74b9ff, #0984e3); } /* Friendly Blue */
-    .card-add { background: linear-gradient(135deg, #55efc4, #00b894); } /* Friendly Green */
+    .card-take { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+    .card-add { background: linear-gradient(135deg, #55efc4, #00b894); }
     .btn-icon { font-size: 32px; margin-bottom: 5px; }
     .btn-label { font-size: 22px; font-weight: 600; }
-    .btn-desc { font-size: 13px; opacity: 0.9; }
 
-    /* --- APP SCREEN --- */
     #view-app { display: none; height: 100%; flex-direction: column; }
-    
     .app-header {
       padding: 20px; background: var(--card-bg);
       box-shadow: 0 2px 10px rgba(0,0,0,0.03); z-index: 10;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .back-btn { background: #f1f2f6; color: var(--text-main); padding: 8px 15px; border-radius: 12px; font-weight: 600; font-size: 14px; }
-    .page-title { font-weight: 600; font-size: 18px; }
+    .back-btn { background: #f1f2f6; color: var(--text-main); padding: 8px 15px; border-radius: 12px; font-weight: 600; }
+    .app-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
 
-    .app-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
-
-    /* INPUT STYLES */
-    label { font-size: 12px; font-weight: 600; color: var(--text-sub); display: block; margin-bottom: 8px; margin-top: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
-    
+    label { font-size: 11px; font-weight: 600; color: var(--text-sub); display: block; margin-top: 15px; text-transform: uppercase; }
     select, input {
-      width: 100%; padding: 16px; 
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      border-radius: 16px;
-      font-size: 16px; color: var(--text-main);
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      width: 100%; padding: 14px; margin-top: 5px;
+      border: 1px solid var(--border); background: var(--card-bg);
+      border-radius: 12px; font-size: 15px; box-sizing: border-box;
     }
-    select:focus, input:focus { border-color: var(--accent-take); }
 
-    /* SEARCH RESULTS */
     #searchResults {
-      background: white; border-radius: 16px; margin-top: 10px;
+      background: white; border-radius: 12px; margin-top: 5px;
       box-shadow: var(--shadow); max-height: 250px; overflow-y: auto;
+      border: 1px solid var(--border);
     }
-    .search-item {
-      padding: 15px; border-bottom: 1px solid #f1f2f6; display: flex; justify-content: space-between; align-items: center;
-    }
-    .add-btn { background: var(--text-main); color: white; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+    .search-item { padding: 12px; border-bottom: 1px solid #f1f2f6; display: flex; justify-content: space-between; align-items: center; }
+    .add-new-box { padding: 15px; background: #f8f9fa; border-top: 2px solid var(--accent-add); }
 
-    /* CART CARDS (MATCHING YOUR IMAGE) */
     .cart-card {
-      background: white; border-radius: 16px; padding: 15px; margin-bottom: 12px;
+      background: white; border-radius: 16px; padding: 15px; margin-top: 12px;
       display: flex; justify-content: space-between; align-items: center;
-      box-shadow: var(--shadow); border: 1px solid #f1f2f6;
+      box-shadow: var(--shadow);
     }
-    .item-info { display: flex; flex-direction: column; }
-    .item-name { font-weight: 600; font-size: 16px; color: var(--text-main); }
-    .item-cat { font-size: 12px; color: var(--text-sub); }
+    .qty-box { display: flex; align-items: center; background: #f1f2f6; border-radius: 10px; padding: 2px; }
+    .qty-btn { width: 32px; height: 32px; font-weight: 600; background: transparent; }
+    .qty-val { width: 30px; text-align: center; font-weight: 600; }
 
-    /* QTY CONTROL (+ / -) */
-    .qty-box {
-      display: flex; align-items: center;
-      background: #f1f2f6; border-radius: 12px; padding: 4px;
-    }
-    .qty-btn { width: 36px; height: 36px; font-size: 18px; font-weight: 600; background: transparent; color: var(--text-main); display: flex; justify-content: center; align-items: center; }
-    .qty-val { width: 30px; text-align: center; font-weight: 600; font-size: 16px; }
-
-    /* BOTTOM BAR */
-    .bottom-bar {
-      position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px;
-      background: white; border-top: 1px solid var(--border); box-sizing: border-box;
-    }
-    .submit-btn {
-      width: 100%; padding: 18px; border-radius: 16px;
-      font-size: 16px; font-weight: 600; color: white;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    /* LOADER */
-    #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--accent-take); font-weight: 600; }
+    .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: white; border-top: 1px solid var(--border); box-sizing: border-box; }
+    .submit-btn { width: 100%; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 600; color: white; }
+    #loader { position: fixed; inset: 0; background: white; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
   </style>
 </head>
 <body>
 
   <div id="loader">
-    <div style="font-size:40px; margin-bottom:10px;">📦</div>
-    <div>Loading System...</div>
+    <div style="font-size:40px;">📦</div>
+    <div style="margin-top:10px; font-weight:600;">Syncing Inventory...</div>
   </div>
 
   <div id="view-landing" class="hidden">
     <button class="landing-card card-take" onclick="startApp('TAKE')">
       <span class="btn-icon">📤</span>
       <span class="btn-label">Take Item</span>
-      <span class="btn-desc">Request Approval</span>
     </button>
-    
     <button class="landing-card card-add" onclick="startApp('ADD')">
       <span class="btn-icon">📥</span>
       <span class="btn-label">Add Stock</span>
-      <span class="btn-desc">Direct Update</span>
     </button>
   </div>
 
   <div id="view-app">
     <div class="app-header">
       <button class="back-btn" onclick="goHome()">Back</button>
-      <span class="page-title" id="page-title">Request</span>
+      <span id="page-title" style="font-weight:600;">Request</span>
       <div style="width:50px"></div>
     </div>
 
@@ -152,16 +113,16 @@
       <label>Staff Member</label>
       <select id="userSelect"></select>
 
-      <label>Purpose / Reason</label>
-      <input type="text" id="purpose" placeholder="e.g. Meeting Room Setup...">
+      <label>Purpose</label>
+      <input type="text" id="purpose" placeholder="e.g., Event Setup">
 
-      <hr style="margin:25px 0; border:0; border-top:1px dashed #dfe6e9;">
+      <hr style="margin:20px 0; border:0; border-top: 1px dashed #ccc;">
 
-      <label>Search Item</label>
-      <input type="text" id="searchInput" placeholder="Type name..." autocomplete="off">
+      <label>Search or Create Item</label>
+      <input type="text" id="searchInput" placeholder="Search item name..." autocomplete="off">
       <div id="searchResults" class="hidden"></div>
 
-      <div id="cartList" style="margin-top:20px;"></div>
+      <div id="cartList"></div>
     </div>
 
     <div class="bottom-bar">
@@ -170,57 +131,44 @@
   </div>
 
 <script>
-  // ===========================================
-  // ⚠️ PASTE YOUR NEW SCRIPT URL HERE 👇
-  const API_URL = "https://script.google.com/macros/s/AKfycbwrl_9ZwWmzha06M5VavKnt-h0CgVP-h3GIs9NPWCDLaJwbN_x7SMgvHZqvW96Ohq_U/exec"; 
+  // Replace with your Web App URL
+  const API_URL = "https://script.google.com/macros/s/AKfycbw19CSN1OxuYTycvFltEEN6CH-W6wTFn0dCYwLwmkEuqWbUHcIPSF7axfGAONA3YxqR/exec"; 
 
   const STAFF_LIST = [
     { name: "Ahmed", email: "ahmed.tanany@sirkil.com" },
     { name: "Abdullah", email: "abdallah.yahya@sirkil.com" },
     { name: "Omar", email: "omar@sirkil.com" },
-    { name: "Amr", email: "amr@example.com" },
-    { name: "Rami", email: "amr@example.com" },
-    { name: "Hazem", email: "amr@example.com" }
+    { name: "Amr", email: "amr@example.com" }
   ];
-  // ===========================================
 
   let inventory = [];
   let cart = [];
   let MODE = "";
 
   window.onload = async () => {
-    // Populate Staff
     const sel = document.getElementById("userSelect");
     STAFF_LIST.forEach(u => sel.add(new Option(u.name, u.email)));
+    loadData();
+  };
 
-    // Load Data
+  async function loadData() {
     try {
       const res = await fetch(API_URL);
       inventory = await res.json();
       document.getElementById("loader").classList.add("hidden");
       document.getElementById("view-landing").classList.remove("hidden");
     } catch(e) {
-      document.getElementById("loader").innerHTML = "Connection Failed.<br>Check Script URL.";
+      document.getElementById("loader").innerHTML = "Error loading data.";
     }
-  };
+  }
 
   function startApp(mode) {
     MODE = mode;
     document.getElementById("view-landing").classList.add("hidden");
     document.getElementById("view-app").style.display = "flex";
-    
-    const title = document.getElementById("page-title");
     const btn = document.getElementById("mainBtn");
-
-    if (mode === 'TAKE') {
-      title.innerText = "Take from Stock";
-      btn.innerText = "Send Request";
-      btn.style.background = "#0984e3";
-    } else {
-      title.innerText = "Add to Stock";
-      btn.innerText = "Confirm Add";
-      btn.style.background = "#00b894";
-    }
+    document.getElementById("page-title").innerText = mode === 'ADD' ? "Add to Stock" : "Take from Stock";
+    btn.style.background = mode === 'ADD' ? "#00b894" : "#0984e3";
   }
 
   function goHome() {
@@ -230,102 +178,107 @@
     renderCart();
   }
 
-  // SEARCH LOGIC
   const searchInput = document.getElementById("searchInput");
   const resultsDiv = document.getElementById("searchResults");
 
-  searchInput.addEventListener("input", (e) => {
-    const q = e.target.value.toLowerCase();
+  searchInput.addEventListener("input", () => {
+    const q = searchInput.value.toLowerCase();
     resultsDiv.innerHTML = "";
-    if (q.length < 2) { resultsDiv.classList.add("hidden"); return; }
+    if (q.length < 1) { resultsDiv.classList.add("hidden"); return; }
 
     const matches = inventory.filter(i => i.name.toLowerCase().includes(q));
-    if(matches.length > 0) {
-      resultsDiv.classList.remove("hidden");
-      matches.slice(0, 10).forEach(item => {
-        const div = document.createElement("div");
-        div.className = "search-item";
-        div.innerHTML = `
-          <div>
-            <div style="font-weight:600;">${item.name}</div>
-            <div style="font-size:12px; color:#aaa;">${item.category}</div>
-          </div>
-          <button class="add-btn" onclick="addToCart('${item.name}', '${item.category}')">ADD</button>
-        `;
-        resultsDiv.appendChild(div);
+    resultsDiv.classList.remove("hidden");
+
+    matches.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "search-item";
+      div.innerHTML = `<div><b>${item.name}</b><br><small>${item.category}</small></div>
+                       <button class="back-btn" style="background:var(--text-main); color:white;" onclick="addToCart('${item.name}', '${item.category}')">ADD</button>`;
+      resultsDiv.appendChild(div);
+    });
+
+    if (MODE === "ADD") {
+      const addNew = document.createElement("div");
+      addNew.className = "add-new-box";
+      const categories = [...new Set(inventory.map(i => i.category))];
+      addNew.innerHTML = `
+        <div style="font-size:12px; margin-bottom:5px;"><b>NEW ITEM:</b> "${searchInput.value}"</div>
+        <select id="newSheetSel" style="padding:8px; font-size:12px;">
+          <option value="">-- Choose Sheet --</option>
+          ${categories.map(c => `<option value="${c}">${c}</option>`).join('')}
+          <option value="NEW">+ Create New Sheet</option>
+        </select>
+        <input type="text" id="customSheet" class="hidden" placeholder="Sheet Name..." style="padding:8px; margin-top:5px; font-size:12px;">
+        <button onclick="addNewItem()" style="width:100%; margin-top:10px; background:var(--accent-add); color:white; padding:10px; border-radius:8px; font-weight:600;">Create & Add</button>
+      `;
+      resultsDiv.appendChild(addNew);
+      
+      document.getElementById('newSheetSel').addEventListener('change', (e) => {
+        document.getElementById('customSheet').classList.toggle('hidden', e.target.value !== 'NEW');
       });
-    } else {
-      resultsDiv.classList.add("hidden");
     }
   });
+
+  function addNewItem() {
+    const name = searchInput.value;
+    let sheet = document.getElementById('newSheetSel').value;
+    if (sheet === 'NEW') sheet = document.getElementById('customSheet').value;
+    if (!name || !sheet) return alert("Enter name and select sheet");
+    addToCart(name, sheet);
+  }
 
   function addToCart(name, category) {
     const existing = cart.find(c => c.name === name && c.category === category);
     if(existing) existing.qty++;
     else cart.push({ name, category, qty: 1 });
-    
     renderCart();
     searchInput.value = "";
     resultsDiv.classList.add("hidden");
   }
 
-  // CART UI (MATCHING IMAGE 2)
   function renderCart() {
     const list = document.getElementById("cartList");
     list.innerHTML = "";
-    
     cart.forEach((item, idx) => {
       const div = document.createElement("div");
       div.className = "cart-card";
-      div.innerHTML = `
-        <div class="item-info">
-          <span class="item-name">${item.name}</span>
-          <span class="item-cat">${item.category}</span>
-        </div>
+      div.innerHTML = `<div><b>${item.name}</b><br><small>${item.category}</small></div>
         <div class="qty-box">
-          <button class="qty-btn" onclick="modQty(${idx}, -1)">−</button>
+          <button class="qty-btn" onclick="modQty(${idx},-1)">−</button>
           <span class="qty-val">${item.qty}</span>
-          <button class="qty-btn" onclick="modQty(${idx}, 1)">+</button>
-        </div>
-      `;
+          <button class="qty-btn" onclick="modQty(${idx},1)">+</button>
+        </div>`;
       list.appendChild(div);
     });
   }
 
-  function modQty(idx, delta) {
-    cart[idx].qty += delta;
-    if(cart[idx].qty <= 0) cart.splice(idx, 1);
+  function modQty(idx, d) {
+    cart[idx].qty += d;
+    if(cart[idx].qty <= 0) cart.splice(idx,1);
     renderCart();
   }
 
   async function submitData() {
-    if(cart.length === 0) return alert("Please add items.");
-    const purpose = document.getElementById("purpose").value;
-    if(!purpose) return alert("Enter a purpose.");
-
-    const uSel = document.getElementById("userSelect");
-    const user = { name: uSel.options[uSel.selectedIndex].text, email: uSel.value };
-
+    if(!cart.length || !document.getElementById("purpose").value) return alert("Fill all fields");
     const btn = document.getElementById("mainBtn");
-    btn.innerText = "Processing...";
-    btn.disabled = true;
+    btn.disabled = true; btn.innerText = "Processing...";
+    
+    const payload = {
+      type: MODE,
+      purpose: document.getElementById("purpose").value,
+      user: { name: document.getElementById("userSelect").selectedOptions[0].text, email: document.getElementById("userSelect").value },
+      cart: cart
+    };
 
     try {
-      await fetch(API_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ type: MODE, user, purpose, cart })
-      });
-      alert("Success! Action Recorded.");
+      await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+      alert("Success!");
       location.reload();
     } catch(e) {
-      alert("Error sending data.");
+      alert("Error saving.");
       btn.disabled = false;
-      btn.innerText = "Retry";
     }
   }
 </script>
 </body>
-
 </html>
